@@ -5,9 +5,11 @@ from dataclasses import dataclass
 from datetime import datetime
 
 class Ingestion: # Focus on SPX
+    def __init__(self):
+        self.close_data = self.close_data()
 
     def stock_data(self): # Print all the Data of the Stock Ticker
-        StockData = yf.download('^GSPC', start='1950-01-01', end=datetime.now().strftime('%Y-%m-%d'))
+        StockData = yf.download('^GSPC', start='2020-01-01', end=datetime.now().strftime('%Y-%m-%d'))
         return StockData
 
     # Task: Get Open, High and Low Data
@@ -19,29 +21,29 @@ class Ingestion: # Focus on SPX
     # Strategy One: Moving Averages
     # Example of Moving Averages
     def sma_10(self): # Ten Day Moving Average
-        SMA10 = self.close_data().rolling(window=10).mean()
+        SMA10 = self.close_data.rolling(window=10).mean()
         return SMA10
 
     def sma_20(self):
-        SMA20 = self.close_data().rolling(window=20).mean()
+        SMA20 = self.close_data.rolling(window=20).mean()
         return SMA20
 
     # Task: Do SMAFifty, SMAOneHundred, SMATwoHundred
     def sma_50(self):
-        SMA50 = self.close_data().rolling(window=20).mean()
+        SMA50 = self.close_data.rolling(window=20).mean()
         return SMA50
 
     def sma_100(self):
-        SMA100 = self.close_data().rolling(window=100).mean()
+        SMA100 = self.close_data.rolling(window=100).mean()
         return SMA100
 
     def sma_200(self):
-        SMA200 = self. close_data().rolling(window=100).mean()
+        SMA200 = self. close_data.rolling(window=100).mean()
         return SMA200
 
     # Strategy Two: Mean Reversion
     def std_twenty(self):
-        STDTwenty = self.close_data().rolling(window=20).std()
+        STDTwenty = self.close_data.rolling(window=20).std()
         return STDTwenty
 
     def upper_bollinger_twenty(self):
@@ -55,7 +57,7 @@ class Ingestion: # Focus on SPX
         pass
 
     def ema_twelve(self):
-        TwelveDays = self.close_data().ewm(span=12, adjust=False).mean()
+        TwelveDays = self.close_data.ewm(span=12, adjust=False).mean()
         return TwelveDays
 
 
@@ -72,9 +74,14 @@ class Insertion:
         self.Connection.commit()
 
     def compare_data(self):
-        Query = "SELECT * FROM MainDF WHERE \"SMATen\" > \"SMATwenty\""
+        Query = "SELECT * FROM MainDF WHERE \"SMA10\" > \"SMA20\""
         FilteredData = pd.read_sql_query(Query, self.Connection)
         return FilteredData
+
+
+
+
+
 
 
 
